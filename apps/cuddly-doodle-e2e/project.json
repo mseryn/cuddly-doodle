@@ -1,0 +1,9 @@
+{
+  "name": "cuddly-doodle-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/cuddly-doodle-e2e/src",
+  "implicitDependencies": ["cuddly-doodle"],
+  "// targets": "to see all targets run: nx show project cuddly-doodle-e2e --web",
+  "targets": {}
+}
