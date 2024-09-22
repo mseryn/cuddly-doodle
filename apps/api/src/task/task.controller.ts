@@ -5,6 +5,11 @@ import { TaskService } from './task.service';
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
+  @Get('/')
+  async getTasks() {
+    return await this.taskService.getTasks();
+  }
+
   @Get('/user/:userId')
   async getUserTasks(@Param('userId') userId: string, @Query('date') date: Date) {
     return await this.taskService.getUserTasks(userId, date ? new Date(date) : undefined);
