@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TaskService } from './task.service';
+import { TodoistModule } from '../todoist/todoist.module';
 
 describe('TaskService', () => {
   let service: TaskService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [TodoistModule],
       providers: [TaskService],
     }).compile();
 
