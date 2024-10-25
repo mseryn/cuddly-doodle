@@ -13,13 +13,16 @@
   "include": [],
   "references": [
     {
-      "path": "./tsconfig.editor.json"
+      "path": "./tsconfig.editor.json",
+      "composite": true
     },
     {
-      "path": "./tsconfig.app.json"
+      "path": "./tsconfig.app.json",
+      "composite": true
     },
     {
-      "path": "./tsconfig.spec.json"
+      "path": "./tsconfig.spec.json",
+      "composite": true
     }
   ],
   "extends": "../../tsconfig.base.json",
