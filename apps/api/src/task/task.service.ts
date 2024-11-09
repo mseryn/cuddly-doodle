@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Res, StreamableFile } from '@nestjs/common';
 import { Task } from './task.dto';
 import { TodoistService } from '../todoist/todoist.service';
+import fs, { createReadStream } from 'fs';
+import path from 'path';
 
 @Injectable()
 export class TaskService {
@@ -16,9 +18,11 @@ export class TaskService {
 
     if (options.date != null) {
       taskQuery['filter'] = `due ${options.date.toDateString()}`;
+    } else {
+      taskQuery['filter'] = 'due today';
     }
 
-    const tasks = await client.getTasks({ projectId: process.env.TODOIST_PROJECT_KEY });
+    const tasks = await client.getTasks({ ...taskQuery, projectId: process.env.TODOIST_PROJECT_KEY });
 
     console.log(tasks);
 
@@ -42,9 +46,9 @@ export class TaskService {
 
     const date = options.date ?? new Date();
     date.setUTCHours(0, 0, 0, 0);
-    console.log(result);
+    //console.log(result);
     const json = await result.json();
-    console.log(json.items);
+    //console.log(json.items);
 
     const completedResult = await fetch('https://api.todoist.com/sync/v9/completed/get_all?' + new URLSearchParams({ since: date.toISOString() }), {
       method: 'GET',
@@ -54,13 +58,19 @@ export class TaskService {
     });
 
     const completedTasks = await completedResult.json();
-    console.log(completedTasks);
+    console.log('Completed tasks:', completedTasks);
 
 
     for (const task of completedTasks.items) {
-      console.log(task);
-      if (tasks.find(t => t.id === task.id) == null) {
-        tasks.push(task);
+      const existingTask = tasks.find(t => t.id === task.task_id);
+      if (existingTask) {
+        const endOfToday = new Date();
+        endOfToday.setHours(23, 59, 59, 999);
+        existingTask.isCompleted = new Date(existingTask.due?.date) > endOfToday;
+      } else {
+        const new_task = await client.getTask(task.task_id);
+        tasks.push(new_task);
+        //tasks.push(task);
       }
     }
 
@@ -74,15 +84,46 @@ export class TaskService {
   async getTask(id: string): Promise<Task> {
     const client = this.todoistService.client;
 
-    return await client.getTask(id);
+    const task = await client.getTask(id);
+    if (task.due?.isRecurring) {
+      const endOfToday = new Date();
+      endOfToday.setHours(23, 59, 59, 999);
+      task.isCompleted = new Date(task.due?.date) > endOfToday;
+    }
+
+    return task
   }
 
   async updateTaskDone(id: string, done: boolean): Promise<boolean> {
     const client = this.todoistService.client;
 
-    if (done) {
-      return await client.closeTask(id);
+    console.warn('Updating task status', id, done);
+
+    if (!done) {
+      const task = await client.getTask(id);
+
+      if (task.due?.isRecurring) {
+        await client.updateTask(id, { dueString: task.due.string });
+        return true
+      }
+      return await client.reopenTask(id);
     }
-    return await client.reopenTask(id);
+
+    return await client.closeTask(id);
+  }
+
+  async getImage(id: string): Promise<StreamableFile> {
+    const client = this.todoistService.client;
+    const task = await client.getTask(id);
+
+    const filename = task.content.replace(/ /gi, '_').toLowerCase();
+
+    console.log(path.join(__dirname, `assets/images/${filename}.png`));
+    if (fs.existsSync(path.join(__dirname, `assets/images/${filename}.png`))) {
+      const file = createReadStream(path.join(__dirname, `assets/images/${filename}.png`));
+      return new StreamableFile(file, { type: 'image/png' });
+    }
+    const file = createReadStream(path.join(__dirname, `assets/images/no-image.png`));
+    return new StreamableFile(file, { type: 'image/png' });
   }
 }

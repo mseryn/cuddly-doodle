@@ -2,7 +2,10 @@
   "name": "@cuddly-doodle/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "nx run-many -t build",
+    "serve": "nx serve api"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~18.2.0",

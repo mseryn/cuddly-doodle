@@ -25,4 +25,9 @@ export class TaskController {
   async updateTaskDone(@Param('id') id: string, @Body('done') done: boolean): Promise<boolean> {
     return await this.taskService.updateTaskDone(id, done);
   }
+
+  @Get('/:id/image')
+  async getTaskImage(@Param('id') id: string) {
+    return await this.taskService.getImage(id);
+  }
 }

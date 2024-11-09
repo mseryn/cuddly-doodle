@@ -4,3 +4,15 @@
 @include mat.core();
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.fill-x {
+  width: 100%;
+}
+.fill-y {
+  height: 100%;
+}
+.fill-xy {
+  @extend .fill-x;
+  @extend .fill-y;
+}

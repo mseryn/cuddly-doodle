@@ -1,0 +1,9 @@
+mat-card {
+  background-color: rgba(0,0,0,0);
+  height: stretch;
+  width: stretch;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  transform-style: preserve-3d;
+}

@@ -1,8 +1,12 @@
-<div class="card" (click)="cardClicked()" [@cardFlip]="data.state">
-  <div class="face back">
-    <img src="/red-circle.jpeg" />
-  </div>
+<div class="card fill-xy" [@cardFlip]="state">
   <div class="face front">
-    <img src="/green-circle.jpeg" />
+    <ng-content select="front"></ng-content>
+    <mat-icon style="color: white;">close</mat-icon>
+    <!--<img src="/red-circle.jpeg" />-->
+  </div>
+  <div class="face back">
+    <ng-content select="back"></ng-content>
+    <mat-icon style="color: white;">check</mat-icon>
+    <!--<img src="/green-circle.jpeg" />-->
   </div>
 </div>

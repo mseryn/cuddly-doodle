@@ -1,24 +1,16 @@
-<mat-card appearance="outlined">
+<mat-card appearance="outlined" class="fill-xy">
   <mat-card-header>
-    <mat-card-title> Welcome to Cuddly Doodle! </mat-card-title>
+    <mat-card-title> Welcome to Cuddly Doodle! <button mat-button (click)="toggleParents()">Parents</button></mat-card-title>
   </mat-card-header>
-  <mat-card-content appearance="outlined">
-    <mat-tab-group mat-stretch-tabs="false">
-      <mat-tab label="First">
-        Content 1
-        <app-task-chip></app-task-chip>
-        <app-task-chip></app-task-chip>
-      </mat-tab>
-      <mat-tab label="Second">
-        Content 2
-        <app-task-chip></app-task-chip>
-        <app-task-chip></app-task-chip>
-      </mat-tab>
-      <mat-tab label="Third">
-        Content 3
-        <app-task-chip></app-task-chip>
-        <app-task-chip></app-task-chip>
-      </mat-tab>
-    </mat-tab-group>
+  <mat-card-content appearance="outlined" class="fill-y">
+    <mat-grid-list rowHeight="fit" [cols]="cols" gutterSize="5px" class="fill-y">
+      @for (user of users; track user) {
+        @if (user.isParent === parents) {
+          <mat-grid-tile class="fill-xy">
+            <app-task-list [user]="user" [tasks]="tasks[user.id]" class="fill-xy"></app-task-list>
+          </mat-grid-tile>
+        }
+      }
+    </mat-grid-list>
   </mat-card-content>
 </mat-card>

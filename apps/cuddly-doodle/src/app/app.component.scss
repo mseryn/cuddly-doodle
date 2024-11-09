@@ -1,3 +1,14 @@
 
 @use '@angular/material' as mat;
 @include mat.core();
+
+.fill-x {
+  width: 100%;
+}
+.fill-y {
+  height: 100%;
+}
+.fill-xy {
+  @extend .fill-x;
+  @extend .fill-y;
+}

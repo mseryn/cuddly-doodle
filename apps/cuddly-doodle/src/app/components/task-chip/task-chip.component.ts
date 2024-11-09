@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import {
   trigger,
   state,
@@ -8,15 +9,10 @@ import {
   transition,
 } from '@angular/animations';
 
-export interface CardData {
-  imageId: string;
-  state: 'default' | 'flipped';
-}
-
 @Component({
   selector: 'app-task-chip',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './task-chip.component.html',
   styleUrl: './task-chip.component.css',
   animations: [
@@ -39,16 +35,6 @@ export interface CardData {
   ],
 })
 export class TaskChipComponent {
-  data: CardData = {
-    imageId: "",
-    state: 'default',
-  };
-
-  cardClicked() {
-    if (this.data.state === 'default') {
-      this.data.state = 'flipped';
-    } else {
-      this.data.state = 'default';
-    }
-  }
+  @Input()
+  state: 'default' | 'flipped' = 'default';
 }
