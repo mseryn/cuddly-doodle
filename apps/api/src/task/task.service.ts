@@ -34,6 +34,7 @@ export class TaskService {
     data.append('resource_types', '["items"]');
     data.append('sync_token', '*');
 
+    /*
     const result = await fetch('https://api.todoist.com/sync/v9/sync', {
       method: 'POST',
       headers: {
@@ -44,11 +45,13 @@ export class TaskService {
     });
 
 
-    const date = options.date ?? new Date();
-    date.setUTCHours(0, 0, 0, 0);
     //console.log(result);
     const json = await result.json();
     //console.log(json.items);
+    */
+   
+    const date = options.date ?? new Date();
+    date.setUTCHours(0, 0, 0, 0);
 
     const completedResult = await fetch('https://api.todoist.com/sync/v9/completed/get_all?' + new URLSearchParams({ since: date.toISOString() }), {
       method: 'GET',

@@ -12,6 +12,11 @@ describe('TaskListComponent', () => {
 
     fixture = TestBed.createComponent(TaskListComponent);
     component = fixture.componentInstance;
+    component.user = {
+      id: "123456",
+      name: "Test User",
+      isParent: false
+    }
     fixture.detectChanges();
   });
 

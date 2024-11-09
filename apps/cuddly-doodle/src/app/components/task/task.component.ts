@@ -1,9 +1,10 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, effect, viewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, effect, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskChipComponent } from '../task-chip/task-chip.component';
 import { MatCardModule } from '@angular/material/card';
 import { DataService } from '../../services/data.service';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { Task } from '@cuddly-doodle/shared';
 
 @Component({
   selector: 'app-task',
@@ -18,7 +19,7 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 })
 export class TaskComponent implements OnChanges {
 
-  @Input() task: any
+  @Input() task!: Task
   icon = viewChild<MatIcon>('icon')
   observer: ResizeObserver
   oldIcon?: MatIcon

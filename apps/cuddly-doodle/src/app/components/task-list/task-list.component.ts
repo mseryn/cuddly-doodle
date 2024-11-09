@@ -4,6 +4,7 @@ import { TaskComponent } from '../task/task.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { Task, User } from '@cuddly-doodle/shared';
 
 @Component({
   selector: 'app-task-list',
@@ -19,6 +20,6 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './task-list.component.css',
 })
 export class TaskListComponent {
-  @Input() user!: { name: string }
-  @Input() tasks!: any[]
+  @Input() user!: User
+  @Input() tasks!: Task[]
 }
