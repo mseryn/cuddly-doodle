@@ -1,0 +1,8 @@
+<div class="fill-xy">
+  @if (loading()) {
+    <div class="backdrop fill-xy" style="display: flex; justify-content: center; align-items: center;">
+      <mat-spinner class="fill-xy" [diameter]="spinnerWidth"></mat-spinner>
+    </div>
+  }
+  <ng-content></ng-content>
+</div>

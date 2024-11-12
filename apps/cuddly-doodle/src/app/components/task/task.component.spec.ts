@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TaskComponent } from './task.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-
 window.ResizeObserver =
     window.ResizeObserver ||
     jest.fn().mockImplementation(() => ({

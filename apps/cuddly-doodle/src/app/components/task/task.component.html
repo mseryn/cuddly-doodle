@@ -1,19 +1,21 @@
-<app-task-chip (click)="toggleTask()" [state]="state" class="fill-xy">
-  <ng-container ngProjectAs="front">
-    <mat-card appearance="outlined" class="fill-xy">
-      <img mat-card-image src="/api/task/{{task.id}}/image" />
-      <mat-card-content>
-        {{task.content}}
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
-  <ng-container ngProjectAs="back">
-    <mat-card appearance="outlined" class="fill-xy">
-        <mat-icon #icon style="width: 100%; color:green">check_circle</mat-icon>
-      <!--<img mat-card-xl-image src="/api/task/{{task.id}}/image" />-->
-      <mat-card-content>
-        {{task.content}}
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
-</app-task-chip>
+<app-overlay-spinner [loading]="loading" [spinnerWidth]="spinnerWidth">
+  <app-task-chip (click)="toggleTask()" [state]="state" class="fill-xy">
+    <ng-container ngProjectAs="front">
+      <mat-card appearance="outlined" class="fill-xy">
+        <img mat-card-image src="/api/task/{{task.id}}/image" />
+        <mat-card-content>
+          {{task.content}}
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+    <ng-container ngProjectAs="back">
+      <mat-card appearance="outlined" class="fill-xy">
+          <mat-icon #icon style="width: 100%; color:green">check_circle</mat-icon>
+        <!--<img mat-card-xl-image src="/api/task/{{task.id}}/image" />-->
+        <mat-card-content>
+          {{task.content}}
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+  </app-task-chip>
+</app-overlay-spinner>
