@@ -35,6 +35,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.interval = window.setInterval(() => {
         this.fetchTasks()
       }, 5 * 60 * 1000)
+      this.fetchTasks()
     }
 
     async ngOnDestroy(): Promise<void> {
