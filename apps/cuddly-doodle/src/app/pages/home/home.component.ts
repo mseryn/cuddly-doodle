@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -21,13 +21,13 @@ import { Task, User } from '@cuddly-doodle/shared';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
     tasks: Record<string, Task[]> = {}
     users: User[] = []
     parents = false
     cols = 3
-    interval: number = 0
+    interval = 0
   
     constructor(private readonly dataService: DataService) { }
   
