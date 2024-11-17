@@ -126,7 +126,19 @@ export class TaskService {
     const client = this.todoistService.client;
     const task = await client.getTask(id);
 
-    const filename = task.content.replace(/ /gi, '_').toLowerCase();
+    let filename = task.content
+
+    if (task.description) {
+      const parts = task.description.split(' ')
+      for (const part of parts) {
+        if (part.startsWith('image:')) {
+          filename = part.split(':', 2)[1];
+          break;
+        }
+      }
+    }
+
+    filename = filename.replace(/ /gi, '_').toLowerCase();
 
     console.log(path.join(__dirname, `assets/images/${filename}.png`));
     if (fs.existsSync(path.join(__dirname, `assets/images/${filename}.png`))) {
