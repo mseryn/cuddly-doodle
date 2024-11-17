@@ -1,4 +1,4 @@
-import { Injectable, Res, StreamableFile } from '@nestjs/common';
+import { Injectable, StreamableFile } from '@nestjs/common';
 import { Task } from './task.dto';
 import { TodoistService } from '../todoist/todoist.service';
 import fs, { createReadStream } from 'fs';
@@ -8,7 +8,7 @@ import path from 'path';
 export class TaskService {
   constructor(private readonly todoistService: TodoistService) {}
 
-  async getTasks(options: {userId?: string, date?: Date} = {}): Promise<Array<Task>> {
+  async getTasks(options: {userId?: string, date?: Date, filter?: string} = {}): Promise<Array<Task>> {
     const client = this.todoistService.client;
     const taskQuery = { projectId: process.env.TODOIST_PROJECT_KEY };
 
@@ -16,10 +16,17 @@ export class TaskService {
       taskQuery['sectionId'] = options.userId;
     }
 
-    if (options.date != null) {
+    if (options.filter != null) {
+      taskQuery['filter'] = options.filter;
+    } else if (options.date != null) {
       taskQuery['filter'] = `due ${options.date.toDateString()}`;
     } else {
-      taskQuery['filter'] = 'due today';
+      const date = new Date();
+      let timeFilter = ' & (@morning | !@afternoon)'
+      if (date.getHours() >= 13) {
+        timeFilter = ' & (@afternoon | !@morning)'
+      }
+      taskQuery['filter'] = 'due today' + timeFilter;
     }
 
     const tasks = await client.getTasks({ ...taskQuery, projectId: process.env.TODOIST_PROJECT_KEY });
@@ -128,5 +135,14 @@ export class TaskService {
     }
     const file = createReadStream(path.join(__dirname, `assets/images/no-image.png`));
     return new StreamableFile(file, { type: 'image/png' });
+  }
+
+  async rescheduleOverdue(): Promise<void> {
+    const overdue = await this.getTasks({ filter: 'overdue & recurring' });
+
+    for (const task of overdue) {
+      await this.todoistService.client.updateTask(task.id, { dueString: task.due.string });
+    }
+
   }
 }

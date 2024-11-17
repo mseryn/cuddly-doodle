@@ -2,7 +2,7 @@
   <mat-card-title>{{user.name}}</mat-card-title>
   <mat-card-content>
     <mat-grid-list rowHeight="29:32" gutterSize="5px" cols="2" class="fill-xy">
-      @for (task of tasks; track task) {
+      @for (task of tasks; track task.id) {
         <mat-grid-tile>
           <app-task [task]="task" class="fill-xy"></app-task>
         </mat-grid-tile>

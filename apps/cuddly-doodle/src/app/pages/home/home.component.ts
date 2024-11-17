@@ -27,10 +27,21 @@ export class HomeComponent implements OnInit {
     users: User[] = []
     parents = false
     cols = 3
+    interval: number = 0
   
     constructor(private readonly dataService: DataService) { }
   
     async ngOnInit(): Promise<void> {
+      this.interval = window.setInterval(() => {
+        this.fetchTasks()
+      }, 5 * 60 * 1000)
+    }
+
+    async ngOnDestroy(): Promise<void> {
+      window.clearInterval(this.interval)
+    }
+
+    async fetchTasks(): Promise<void> {
       this.users = await this.dataService.getUsers()
       console.warn(this.users)
       const allTasks = await this.dataService.getTasks()

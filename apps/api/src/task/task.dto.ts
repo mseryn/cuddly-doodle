@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNumber, IsObject, IsString } from 'class-validator';
 
 export class Task {
   @ApiProperty()
@@ -25,6 +25,15 @@ export class Task {
   @ApiProperty()
   @IsBoolean()
   isCompleted: boolean;
+
+  @ApiProperty()
+  @IsObject()
+  due?: {
+    date: string;
+    string: string;
+    lang?: string;
+    isRecurring: boolean;
+  };
 
   @ApiProperty()
   @IsArray()
