@@ -26,12 +26,13 @@ export class TaskComponent implements OnChanges {
   icon = viewChild<MatIcon>('icon')
   observer: ResizeObserver
   oldIcon?: MatIcon
-  overlayRef: OverlayRef
+  //overlayRef: OverlayRef
   loading = false
   spinnerWidth = 100
 
   constructor(private readonly dataService: DataService, private readonly overlay: Overlay, private readonly elementRef: ElementRef) {
     this.observer = new ResizeObserver(this.resizeIcon.bind(this))
+    /*
     this.overlayRef = this.overlay.create({
       positionStrategy: this.overlay.position().flexibleConnectedTo(this.elementRef).withPositions([{
         originX: 'center',
@@ -40,6 +41,7 @@ export class TaskComponent implements OnChanges {
         overlayY: 'center'
       }])
     })
+    */
     effect(() => {
       if (this.oldIcon) {
         this.observer.unobserve(this.oldIcon._elementRef.nativeElement)
@@ -81,10 +83,12 @@ export class TaskComponent implements OnChanges {
     icon?.style.setProperty('line-height', `${width}px`)
     icon?.style.setProperty('height', `${width}px`)
 
+    /*
     this.overlayRef.updateSize({
       width: this.elementRef.nativeElement.offsetWidth,
       height: this.elementRef.nativeElement.offsetHeight
     })
+    */
     this.spinnerWidth = this.elementRef.nativeElement.offsetWidth / 2
   }
 

@@ -73,14 +73,17 @@ export class TaskService {
 
     for (const task of completedTasks.items) {
       const existingTask = tasks.find(t => t.id === task.task_id);
-      if (existingTask) {
+      if (existingTask != null) {
         const endOfToday = new Date();
-        endOfToday.setHours(23, 59, 59, 999);
+        endOfToday.setUTCHours(23, 59, 59, 999);
         existingTask.isCompleted = new Date(existingTask.due?.date) > endOfToday;
       } else {
         const new_task = await client.getTask(task.task_id);
+        console.log('New task:', new_task.isCompleted);
+        const endOfToday = new Date();
+        endOfToday.setUTCHours(23, 59, 59, 999);
+        new_task.isCompleted = new Date(new_task.due?.date) > endOfToday;
         tasks.push(new_task);
-        //tasks.push(task);
       }
     }
 
@@ -97,7 +100,9 @@ export class TaskService {
     const task = await client.getTask(id);
     if (task.due?.isRecurring) {
       const endOfToday = new Date();
-      endOfToday.setHours(23, 59, 59, 999);
+      console.log('Current date: ', endOfToday);
+      endOfToday.setUTCHours(23, 59, 59, 999);
+      console.log('Task due:', new Date(task.due?.date), endOfToday);
       task.isCompleted = new Date(task.due?.date) > endOfToday;
     }
 
