@@ -4,6 +4,13 @@ import { TodoistService } from '../todoist/todoist.service';
 import fs, { createReadStream } from 'fs';
 import path from 'path';
 
+const afterToday = (date: Date): boolean => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  today.setUTCHours(0, 0, 0, 0);
+  return date > today;
+}
+
 @Injectable()
 export class TaskService {
   constructor(private readonly todoistService: TodoistService) {}
@@ -58,7 +65,7 @@ export class TaskService {
     */
    
     const date = options.date ?? new Date();
-    date.setUTCHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
 
     const completedResult = await fetch('https://api.todoist.com/sync/v9/completed/get_all?' + new URLSearchParams({ since: date.toISOString() }), {
       method: 'GET',
@@ -74,15 +81,11 @@ export class TaskService {
     for (const task of completedTasks.items) {
       const existingTask = tasks.find(t => t.id === task.task_id);
       if (existingTask != null) {
-        const endOfToday = new Date();
-        endOfToday.setUTCHours(23, 59, 59, 999);
-        existingTask.isCompleted = new Date(existingTask.due?.date) > endOfToday;
+        existingTask.isCompleted = afterToday(new Date(existingTask.due?.date))
       } else {
         const new_task = await client.getTask(task.task_id);
         console.log('New task:', new_task.isCompleted);
-        const endOfToday = new Date();
-        endOfToday.setUTCHours(23, 59, 59, 999);
-        new_task.isCompleted = new Date(new_task.due?.date) > endOfToday;
+        new_task.isCompleted = afterToday(new Date(new_task.due?.date))
         tasks.push(new_task);
       }
     }
@@ -99,11 +102,7 @@ export class TaskService {
 
     const task = await client.getTask(id);
     if (task.due?.isRecurring) {
-      const endOfToday = new Date();
-      console.log('Current date: ', endOfToday);
-      endOfToday.setUTCHours(23, 59, 59, 999);
-      console.log('Task due:', new Date(task.due?.date), endOfToday);
-      task.isCompleted = new Date(task.due?.date) > endOfToday;
+      task.isCompleted = afterToday(new Date(task.due?.date))
     }
 
     return task
